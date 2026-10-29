@@ -1,0 +1,23 @@
+{
+  "name": "ciemsa_mint_and",
+  "owner": {
+    "name": "ciemsa"
+  },
+  "plugins": [
+    {
+      "name": "engineering-core",
+      "source": "./plugins/engineering-core",
+      "description": "Language-neutral engineering skills: planning, code writing, code review, PR descriptions, simple English, human review walkthroughs."
+    },
+    {
+      "name": "ml-experiments",
+      "source": "./plugins/ml-experiments",
+      "description": "Experiment tracking core: run records, naming, comparison tables, baselines and decisions. Needs a per-repo experiment-profile skill."
+    },
+    {
+      "name": "python-dev",
+      "source": "./plugins/python-dev",
+      "description": "Python coding rules that add to write-good-code."
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "name": "ml-experiments",
+  "description": "Experiment tracking core: run records, naming, comparison tables, baselines and decisions. Needs a per-repo experiment-profile skill.",
+  "version": "0.1.0"
+}
