@@ -9,7 +9,7 @@ A skill here is always generic. Project facts do not belong in it. Each project 
 | Layer | Lives in | Holds | Example |
 |---|---|---|---|
 | Core | a plugin in this repo | rules that hold in any project and any language | `write-good-code`, `planning`, `experiment-tracking` |
-| Language | a `<language>-dev` plugin in this repo | rules for one language, for every project that uses it | `python-conventions` |
+| Language | a `<language>-dev` plugin in this repo | rules for one language, for every project that uses it | `python-conventions`, `godot-conventions` |
 | Project | the consuming repo, in its own skill folder | what only that project needs: commands, columns, exceptions, local agents | `code-conventions`, `experiment-profile` |
 
 When layers disagree, the narrower layer wins: project, then language, then core.
@@ -23,6 +23,7 @@ A core skill that needs project facts says which project skill supplies them, an
 | `engineering-core` | `planning`, `write-good-code`, `code-review`, `write-pr-description`, `write-simple-english`, `human-review-helper` |
 | `ml-experiments` | `experiment-tracking` |
 | `python-dev` | `python-conventions` |
+| `godot-dev` | `godot-conventions` |
 
 A new language gets its own `<language>-dev` plugin, created with its first consumer. Do not create an empty one.
 

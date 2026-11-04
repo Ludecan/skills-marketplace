@@ -1,7 +1,7 @@
 {
-  "name": "ciemsa_mint_and",
+  "name": "personal",
   "owner": {
-    "name": "ciemsa"
+    "name": "personal"
   },
   "plugins": [
     {
@@ -18,6 +18,11 @@
       "name": "python-dev",
       "source": "./plugins/python-dev",
       "description": "Python coding rules that add to write-good-code."
+    },
+    {
+      "name": "godot-dev",
+      "source": "./plugins/godot-dev",
+      "description": "Godot and GDScript coding rules that add to write-good-code."
     }
   ]
 }
