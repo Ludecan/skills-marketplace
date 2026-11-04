@@ -1,5 +1,6 @@
 {
   "name": "personal",
+  "description": "Shared agent skills for engineering work and ML experiment tracking, in layers: core, language and project.",
   "owner": {
     "name": "personal"
   },
