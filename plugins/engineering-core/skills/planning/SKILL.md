@@ -27,17 +27,12 @@ Fast Path flow:
 
 If task scope expands during Fast Path execution, immediately switch to Full Planning Mode before continuing.
 
-# 1. Analyze the Request and Clarify Before Researching
-Understand the user's request and determine success criteria. 
-If the task is ambiguous, under-specified, or has more than one reasonable interpretation,
-ask the user clarifying questions BEFORE researching. Surface things like:
-- Scope boundaries (what is in / out of this task)
-- Target data formats or interfaces if unclear
-- Success criteria (what does "done" look like)
-- Any constraints not stated explicitly (performance, compatibility, deadlines)
+# Execution authorization
 
-Only proceed to research once the task is concrete enough to write a focused brief.
-Do not invent assumptions to avoid asking - a clarifying question is cheaper than a wrong plan.
+Use the current user request and working agreement to determine execution and approval boundaries. A plan supplies implementation steps; it does not grant permission or select unrelated work. Existing authorization remains valid through routine planning, verification and recovery. Pause for an approval only when the required decision is not already authorized or the user explicitly requested a review gate. Autonomous selection, retry and stopping policies belong to the active working mode.
+
+# 1. Analyze the Request
+Understand the user's request, scope and success criteria. Resolve ordinary implementation questions from available project context and research. Ask the user for information that only they can supply or decisions that materially change the authorized scope. Continue independent authorized research while a required answer is pending.
 
 # 2. Research
 Research the existing codebase with a clear research brief:
@@ -51,16 +46,14 @@ Based on research findings, write a multi-phase plan (3-10 phases) following the
 
 Each phase must:
 - Have a single, focused objective
-- Follow TDD: write failing tests → write minimal code → confirm tests pass
+- Define verification suited to its output. Use meaningful failing checks for changed behavior; use source evidence or document checks for discovery and documentation phases. Follow project requirements for test sensitivity and acceptance.
 - Be independently committable
 
-# 4. Present Plan and Pause for Approval
-Share the plan synopsis in chat. Highlight open questions or design choices.
-
-**MANDATORY STOP** - wait for the user to approve or revise the plan before proceeding.
+# 4. Present the Plan
+Share the plan synopsis, material decisions and unresolved questions. Obtain approval when the current working agreement requires it and it has not already been granted. Otherwise continue within the existing authorization.
 
 # 5. Write Plan File
-Once approved, write the plan to `plans/<YYYYMMDD_HHMM>_<task-name>-plan.md`. Get the timestamp from `date +%Y%m%d_%H%M` so plans sort by creation time.
+Once execution is authorized, write the plan to `plans/<YYYYMMDD_HHMM>_<task-name>-plan.md`. Get the timestamp from `date +%Y%m%d_%H%M` so plans sort by creation time.
 
 # 6. Execute Phases (repeat per phase)
 
@@ -72,7 +65,7 @@ Execute the task considering:
 - Relevant files and functions identified by the research step
 - The tests to write (from the plan)
 - Any constraints (e.g., "match the existing API/dataclasses", "use pytest fixtures already in conftest.py")
-- Follow strict TDD and report back with a phase summary
+- Apply the phase's verification method and report its result
 
 ## 6.2 Verification
 After execution completion, verify success considering:
@@ -81,20 +74,13 @@ After execution completion, verify success considering:
 - Review uncommitted changes and return one of: `APPROVED` / `NEEDS_REVISION` / `FAILED`
 
 ## 6.3 Handle verification results
-- `APPROVED` → proceed to commit step
-- `NEEDS_REVISION` → use verification feedback and go back to execution step for a revision pass; re-verify after
-- `FAILED` → **MANDATORY STOP**, present the failure to the user and ask for guidance
+- `APPROVED`: record the completed phase and advance within authorization.
+- `NEEDS_REVISION`: revise the implementation and rerun the affected checks.
+- `FAILED`: preserve evidence and identify the next resolving experiment or recovery action. The active working mode decides whether to recover, change approach, discuss the result or park the work. A failed check alone does not revoke execution authorization.
 
-## 6.4 Commit
-Generate a git commit message following `<git_commit_style_guide>` and **present it in chat**.
-**MANDATORY STOP** - user makes the commit and confirms readiness to continue.
+## 6.4 Commits
 
-**Do not skip this step.** A phase is not finished - and you must not describe
-it as "complete", summarize it, or ask about the next phase - until the
-commit message for it has been generated and shown in the same response as
-the phase summary. Passing tests and a clean lint are necessary but not
-sufficient; the commit message is a required deliverable of every phase,
-not an optional extra you provide only if asked.
+Create commits only when authorized. When commits are part of the requested workflow, group changes at meaningful phase boundaries and use the commit style below. A commit or a proposed commit message is not an acceptance requirement for the phase itself. Do not add a user pause solely because a phase ended.
 
 # 7. Propose PR Slices and Align with the User
 When all phases are complete, look at the real diff and propose how to split it into PR slices. Do this at the end, not in the plan: fixes and other changes that nobody could foresee during planning are in the diff now.
@@ -105,9 +91,9 @@ Each slice is one PR that stands alone: it can merge by itself, tests pass, and 
 - The changed line count
 - How a reviewer can verify it, if the slice is over the size warning and cannot be split
 
-Put fixes, refactors, renames and formatting first, as slices that branch from `main`. Include every unrelated bug that was recorded during execution as its own slice.
+Choose the base branch from repository context. Propose slices for the changes actually implemented. Record unrelated findings separately; they do not authorize additional fixes or PRs.
 
-**MANDATORY STOP** - wait for the user to approve or revise the slices. Do not create branches or PRs before then.
+Present the proposed slices. Follow existing authorization for creating branches and PRs; request a decision when that action remains unauthorized.
 
 # 8. Final Report
 When all phases are complete, summarize the overall result in chat, including:
@@ -157,9 +143,9 @@ File name: `plans/<YYYYMMDD_HHMM>_<task-name>-plan.md` (timestamp, then the task
 
 Rules:
 - No code blocks in the plan file - describe changes in prose and reference file paths
-- No manual testing or validation steps unless explicitly requested by the user
-- Each phase should touch 1-3 files maximum
-- TDD red/green cycle must be contained within a single phase (no spanning phases)
+- Include the validation channels required by the project and the behavior under test, including manual or visual review when applicable
+- Keep each phase cohesive; choose its file count from the dependency structure
+- When using a red/green cycle, keep its failing control and verification with the corresponding behavior change
 
 </plan_style_guide>
 
@@ -186,9 +172,8 @@ feat(annotation-parser): add CVAT XML frame extraction
 ---
 
 ## Constraints
-- In Full Planning Mode, you NEVER skip the plan approval pause
-- In Full Planning Mode, you keep commit pauses at real phase boundaries; do not create extra stop points for trivial follow-up edits that are still part of the same phase
+- In Full Planning Mode, resolve material scope decisions under the current authorization
+- In Full Planning Mode, use meaningful phase boundaries without inventing approval or commit gates
 - In Full Planning Mode, you do not start execution without a research pass first
-- In Full Planning Mode, you do not fix unrelated bugs during execution. Record them for the PR slicing step and tell the user
-- In Full Planning Mode, you NEVER end a phase turn without presenting that phase's commit message - a phase summary without one is incomplete, not just terse
-- In Fast Path, you must still clarify scope and run targeted verification
+- In Full Planning Mode, record unrelated defects without expanding the implementation scope
+- In Fast Path, establish scope from context and run appropriate targeted verification
