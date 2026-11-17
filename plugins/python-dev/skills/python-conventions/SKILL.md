@@ -1,6 +1,6 @@
 ---
 name: python-conventions
-description: Python rules for writing code. Use whenever writing, fixing, refactoring or reviewing Python (.py) code, alongside `write-good-code`. Covers imports, running Python, logging, type annotations, lookups and tests.
+description: Python rules for writing code. Always use it before you write, fix, refactor or review Python (.py) code, together with `write-good-code` and the repo's `code-conventions` skill, if it has one. Covers imports, running Python, logging, type annotations, lookups and tests.
 ---
 
 # Python conventions

@@ -38,7 +38,7 @@ First orient the user with a map of where the change lives, then walk through th
    - **For each directory:** a heading naming the role it plays in the system, in Core Noun terms; its path; and one line per file with its purpose, change type (new / modified / deleted / renamed) and Phase 2 bucket. Collapse Boilerplate/Wiring files into one line per directory (e.g., "+ 3 config files"). Make the file names clickable links.
    - **Add unchanged files only as anchors** the user needs to place the change (e.g., the entry point that calls the new code), marked as unchanged.
    - **End with one diagram:** the data flow along the top, each step pointing down to the directory that implements it, with changed nodes in `[brackets]`. If there is no flow, use an annotated directory tree.
-   - **Verify every role against the code.** Start from the repo's own map (in the agent instructions, `docs/repo-map.md`, READMEs, architecture docs), then confirm each named file exists and does what the map says by checking the tree and the file's docstring or imports. Maps go stale; if this one is wrong, tell the user.
+   - **Verify every role against the code.** Start from the repo map in `AGENTS.md`, then confirm each named file exists and does what the map says by checking the tree and the file's docstring or imports. Maps go stale; if this one is wrong, tell the user.
    - **Scale to the PR:** if the change touches one directory and three files or fewer, a one-sentence location note replaces the map.
    - Shape to follow:
 

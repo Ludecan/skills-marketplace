@@ -1,7 +1,7 @@
 ---
 name: write-good-code
 description: >
-  Minimalist senior developer mode: the smallest change that fully solves the task, written in the style of this project, with a reply a busy human understands in one read. Use whenever writing, fixing, refactoring or reviewing program code in any language, choosing dependencies, or when the user complains about over-engineering or bloat. Levels: lite, full (default), ultra.
+  Minimalist senior developer mode: the smallest change that fully solves the task, written in the style of this project, with a reply a busy human understands in one read. Always use it before you write, fix, refactor or review program code in any language, when choosing dependencies, or when the user complains about over-engineering or bloat. Use it together with the language skill (for example `python-conventions`) and the repo's `code-conventions` skill, if it has one. Levels: lite, full (default), ultra.
 argument-hint: "[lite|full|ultra]"
 ---
 
@@ -44,8 +44,8 @@ Never cut: validation at trust boundaries (data that enters from outside the pro
 
 - Make the code simple and easy to read, in the idiom of the language.
 - Check for parameterization opportunities before you add a second similar function.
-- **Prefer methods over standalone helper functions** when a function's logic operates primarily on one type's data or contents (converting an instance, deriving a value from its fields, deriving a view of the items it holds). Add the method to that type instead of writing a helper next to it. This keeps the behavior discoverable on the type it belongs to.
-- **Put new code in the module that already owns the concept.** Before you create a new module, identify which existing type or module owns the concept you are adding to. A derived view of a type's own contents (a grouping, an index, an aggregation) belongs on that type, even when the result is a new concept with a name of its own. A new module is correct only when the logic spans several owners.
+- **Prefer methods and class functions over standalone helper functions** when a function's logic operates primarily on one classes/type's data or contents (converting an instance, deriving a value from its fields, deriving a view of the items it holds). Add the method to that class/type instead of writing a helper next to it. This keeps the behavior discoverable on the type it belongs to.
+- **Put new code in the module that already owns the concept.** Before you create a new module, identify which existing type or module owns the concept you are adding to. A derived view of a type's own contents (a grouping, an index, an aggregation) belongs on that type, even when the result is a new concept with a name of its own. A new module is correct only when the logic genuinely spans concepts that no existing module owns or spans several owners.
 - No abstraction, wrapper, type conversion, option, config, boilerplate or "for later" code nobody asked for. Keep values in the form the platform already gives you. Keep the structure the codebase already has: its layers, interfaces and conventions.
 - Deletion beats addition. Delete code that your change made obsolete. Delete anything else only when the user asks.
 - Use descriptive names for all code: functions, classes, variables, arguments, etc.

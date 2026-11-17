@@ -1,6 +1,6 @@
 ---
 name: write-pr-description
-description: Use this skill for creating the pull request (PR) description for a new contribution to the codebase that has finished implementation.
+description: Use this skill whenever you create, open or update a pull request (PR), or when the user asks for a PR description or message, for a contribution that has finished implementation. Write the description with this skill before you run `gh pr create`.
 ---
 
 # Write Pull Request (PR) description
@@ -18,8 +18,8 @@ Every piece of text this skill produces (the intermediate report and the PR desc
 In order to work on a new PR, you need the following inputs:
 
 - The current git branch, and the branch to which this branch is going to merged (usually `main`).
-- The text of the executed plan (if available).
-  - If there is no plan, ALWAYS ask the user to explicitly acknowledge so.
+- The plan file of this work, in `plans/` (`plans/<YYYYMMDD_HHMM>_<task-name>-plan.md`), if available. Find it with `git log --diff-filter=A --name-only --format= <base>..HEAD -- plans/`, which lists the plan files that this branch adds. Do not use a plan file that the base branch already has.
+  - Not every feature has a plan. If there is no plan, ALWAYS ask the user to explicitly acknowledge so.
 
 Ask the user if they are not provided in context, do not guess.
 DO NOT PROCEED with the following step until all the inputs are provided.
@@ -38,7 +38,16 @@ It's important to understand not only what was changed, but also why the change 
 
 DO NOT PROCEED with the following step until the research is complete and all the relevant info is loaded into context.
 
-## Step 3: Intermediate report
+## Step 3: Check the PR with the user
+
+Before you write the intermediate report, talk with the user about two questions. Do not skip this step, and do not answer for the user.
+
+1. **Is the goal met?** Read the goal in the plan, or infer it from the current conversation if there is no plan. Give the user a short list: each goal item, and the evidence in the diff or the tests that meets it. Say plainly which items are not met or not proven.
+2. **Is the design good?** Name the design decisions in the diff that the user should look at, and say how each one follows or breaks the rules in `write-good-code` and the repo's `code-conventions`: for example the module that owns the new code, a new abstraction, a new dependency, or an error path that fails quietly. Say what you would change if you could.
+
+Wait for the user to answer. If the user finds a gap, fix it or write it down as a known limit in the PR description. Only then go on to the intermediate report.
+
+## Step 4: Intermediate report
 
 Analyze and write an intermediate report with all the changes that were made to the code.
 If the plan and the code have a discrepancy, note it, but use the code as the current source of truth: the plan may be outdated. If the discrepancy is big, ask the user about it.
@@ -70,10 +79,10 @@ Ask the user for more info if something is not completely clear from the context
 
 DO NOT PROCEED with the following step until the intermediate report is written.
 
-## Step 4: Produce output
+## Step 5: Produce output
 
 Based on the intermediate report, generate the output: the PR description.
-The PR description must be a concise, human-readable summary of the detail-heavy intermediate report. Carry over the exclusion rules from Step 3: leave out self-introduced-and-fixed bugs and purely cosmetic changes here too.
+The PR description must be a concise, human-readable summary of the detail-heavy intermediate report. Carry over the exclusion rules from Step 4: leave out self-introduced-and-fixed bugs and purely cosmetic changes here too.
 Write the description in ASD-STE100 Simplified Technical English (invoke the `write-simple-english` skill first, per the note above, if you have not already done so in this task).
 
 The PR description must be a markdown-formatted text with the following structure:
@@ -82,8 +91,8 @@ The PR description must be a markdown-formatted text with the following structur
 - Objective: In one or two sentences, describe what the PR attempts to achieve.
 - In short (ELI5): One or two very simple sentences that a person who does not know the code can understand. Use an everyday comparison or a concrete example. No jargon and no file names.
 - Summary: In one paragraph, describe what was done and why, focusing on the decisions that were made in order to be able to do it, and why they were necessary.
-- Review order: The changes, grouped by file, in the order in which a reviewer should read the files. There is no Changes section: this section replaces it. Do not include tests here.
-  - Each top-level item is a clickable repo (Github) link to one changed file.
+- Review order: The changes, grouped by file, in the order in which a reviewer should read the files. Do not include tests here.
+  - Each top-level item is a clickable repo (Github) link to the diff of one changed file.
   - Under each link, a nested list of the changes made in that file, so the reviewer knows what to look for. Each bullet says WHAT was done and WHY, in one short sentence.
   - Include every changed file that is not a test or format change, with no limit on the number of files. Group trivial files (for example, config or lock files) in one last item.
   - Sort the files so that the reviewer first reads the architecture decisions and the core logic, then the code that depends on them.

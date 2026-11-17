@@ -48,7 +48,7 @@ Read the target file or files in their entirety. Identify the module's role with
 
 Map the dependency graph by tracing imports across the affected modules. Identify the boundaries between components. Look for changes that cross architectural layers or introduce new dependencies between previously independent modules.
 
-In all cases, determine the programming language, framework, and any project-specific conventions (check for linter configs, `.editorconfig`, `CLAUDE.md`, or style guides in the repository).
+In all cases, determine the programming language, framework, and any project-specific conventions (check for linter configs, `.editorconfig`, `AGENTS.md`, or style guides in the repository).
 
 ### Phase 2: Analyze Changes
 

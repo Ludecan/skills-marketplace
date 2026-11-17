@@ -1,8 +1,10 @@
 {
   "name": "personal",
-  "description": "Shared agent skills for core software engineering work, and additional namespaces for per-language skills and ML experiment tracking, in layers: core, language and project.",
   "owner": {
     "name": "personal"
+  },
+  "metadata": {
+    "description": "Shared agent skills for core software engineering work, and additional namespaces for per-language skills and ML experiment tracking, in layers: core, language and project."
   },
   "plugins": [
     {
