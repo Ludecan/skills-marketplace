@@ -20,7 +20,7 @@ A core skill that needs project facts says which project skill supplies them, an
 
 | Plugin | Skills |
 |---|---|
-| `engineering-core` | `planning`, `write-good-code`, `code-review`, `write-pr-description`, `write-simple-english`, `human-review-helper`, `project-instructions` |
+| `engineering-core` | `planning`, `write-good-code`, `review-changes`, `write-pr-description`, `write-simple-english`, `human-review-helper`, `project-instructions` |
 | `ml-experiments` | `experiment-tracking` |
 | `python-dev` | `python-conventions` |
 | `godot-dev` | `godot-conventions` |

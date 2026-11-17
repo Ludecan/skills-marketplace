@@ -88,5 +88,5 @@ To verify the user's understanding of the Golden Path, end the walkthrough with 
 - Tests before implementation, always. Anchor understanding in behavior.
 - Trace the execution flow; never just list files or arbitrary groups. The Map (Phase 3, step 1) is the only file listing, and its groups follow the data flow.
 - Hide the boilerplate. Protect the user's cognitive load.
-- No code-quality commentary (style, naming, structure opinions) — if the user asks for a review, point them to the `code-review` skill.
+- No code-quality commentary (style, naming, structure opinions) — if the user asks for a review, point them to the `review-changes` skill.
 - Do not move on while a checkpoint answer is wrong or missing.

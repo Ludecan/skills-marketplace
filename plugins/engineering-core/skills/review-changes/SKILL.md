@@ -1,5 +1,5 @@
 ---
-name: code-review
+name: review-changes
 description: >
   Perform structured, thorough code reviews to identify defects, security issues, and maintainability concerns.
   Trigger phrases:
