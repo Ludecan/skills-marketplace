@@ -24,6 +24,7 @@ A core skill that needs project facts says which project skill supplies them, an
 | `ml-experiments` | `experiment-tracking` |
 | `python-dev` | `python-conventions` |
 | `godot-dev` | `godot-conventions` |
+| `html-dev` | `html-conventions` |
 
 A new language gets its own `<language>-dev` plugin, created with its first consumer. Do not create an empty one.
 
@@ -35,10 +36,12 @@ There are two channels. Both give the same skill text.
 
 ```json
 {
-  "extraKnownMarketplaces": { "<marketplace>": { "source": { "source": "github", "repo": "<org>/<this-repo>" } } },
+  "extraKnownMarketplaces": { "<marketplace>": { "source": { "source": "github", "repo": "<org>/<this-repo>" }, "autoUpdate": true } },
   "enabledPlugins": { "engineering-core@<marketplace>": true }
 }
 ```
+
+The project setting enables a plugin but does not install it. Install each plugin once per machine: `claude plugin install engineering-core@<marketplace> --scope user`. Third-party marketplaces do not auto-update by default, so keep `"autoUpdate": true`. Claude Code then updates a plugin only when its `version` changes (see "Add or change a skill"). To update by hand: `claude plugin marketplace update <marketplace>`, then `/reload-plugins`.
 
 Plugin skills are namespaced: `engineering-core:planning`. Claude Code caches plugins per user, outside the project, so other harnesses cannot see them.
 
@@ -55,7 +58,7 @@ Plugin skills are namespaced: `engineering-core:planning`. Claude Code caches pl
 | `opencode` | Copies the plugin skills into `.agents/skills/`. OpenCode reads `.claude/skills/` itself, so the project skills need nothing. |
 | `codex` or `zed` | Copies the plugin skills into `.agents/skills/`, and links each project skill of `.claude/skills/` (for example `code-conventions` and `experiment-profile`) into `.agents/skills/` with a relative symlink. These harnesses do not read `.claude/skills/`. |
 
-The script writes `.agents/skills/.source` with the commit it copied from, the skills it copied and the links it made. It never touches a folder that is not listed there, and it stops if a project skill has the same name as a copied one. Running it again updates the copies and the links. `--check` exits 1 if a copy differs or a link is missing. `--dest` selects another folder. Commit the copies and the links, so the project stays self-contained. A symlink needs Developer Mode or `core.symlinks` on Windows. In that case, copy the project skills by hand.
+The script writes `.agents/skills/.source` with the commit it copied from, the harnesses, the skills it copied and the links it made. It never touches a folder that is not listed there, and it stops if a project skill has the same name as a copied one. Running it again updates the copies and the links. `--check` exits 1 if a copy differs or a link is missing. `--update REPO...` installs again in each repo with the harnesses and plugins that its `.source` records, so one command refreshes many repos: `./install.sh --update ../repo-a ../repo-b`. Add `--check` to only report drift. `--dest` selects another folder. Commit the copies and the links, so the project stays self-contained. A symlink needs Developer Mode or `core.symlinks` on Windows. In that case, copy the project skills by hand.
 
 Where each harness looks for skills:
 

@@ -1,0 +1,9 @@
+{
+  "name": "html-dev",
+  "description": "Rules for plain HTML, CSS and JavaScript pages with no build step, including single-file apps, that add to write-good-code.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Pablo Alfaro",
+    "email": "pablo@elbosque.ai"
+  }
+}
