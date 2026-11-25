@@ -24,7 +24,7 @@ godot --headless --path . --quit-after 120           # boot the main scene for 1
 
 Run `--import` first on a fresh clone or after you add a `class_name`, or other scripts fail to find the class. After a headless boot, search the output for `SCRIPT ERROR` and `ERROR:`. Godot exits with code 0 even when a script fails.
 
-To make the editor and the headless runs treat missing types as errors, set these in `project.godot` (Project Settings > Debug > GDScript):
+Every project must make the editor and the headless runs treat missing types as errors. Set these in `project.godot` (Project Settings > Debug > GDScript):
 
 ```
 [debug]
@@ -33,7 +33,7 @@ gdscript/warnings/inferred_declaration=0
 gdscript/warnings/unsafe_call_argument=1
 ```
 
-`2` is error, `1` is warning, `0` is ignore. Change these only when the user agrees: an existing project can have many untyped lines.
+`2` is error, `1` is warning, `0` is ignore. `inferred_declaration` stays off, so `:=` is allowed where the type is clear. If a project does not have these settings, add them and fix every untyped line in a separate PR, before the task that needs them. Do not lower a setting to make an error go away.
 
 ## Tests
 

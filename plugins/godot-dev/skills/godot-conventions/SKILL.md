@@ -12,6 +12,7 @@ These rules add to `write-good-code`. The repo's own `code-conventions` skill, i
 
 ## Typing and names
 
+- The typing warnings in `project.godot` are mandatory (see [tools and tests](references/tools-and-tests.md)). Add a type wherever GDScript accepts one.
 - Add static types to new or changed functions, variables, signals and loops: `var lives: int = 3`, `func rescue_friend() -> void`, `signal hit(damage: int)`, `for enemy: Enemy in enemies`. Use typed arrays and dictionaries (`Array[Enemy]`, `Dictionary[String, int]` on 4.4+).
 - Use `:=` only when the type is clear from the right side (`var speed := 0.0`, `var timer := Timer.new()`). Write the type when the right side is a `Variant`, for example `dict["key"]` or `get_node()`.
 - Type node references with `@onready` (`@onready var sprite: Sprite2D = $Sprite2D`). Use `%UniqueName` for nodes that the script must find even after the scene tree changes.
