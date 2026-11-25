@@ -26,6 +26,11 @@
       "name": "godot-dev",
       "source": "./plugins/godot-dev",
       "description": "Godot and GDScript coding rules that add to write-good-code."
+    },
+    {
+      "name": "html-dev",
+      "source": "./plugins/html-dev",
+      "description": "Rules for plain HTML, CSS and JavaScript pages with no build step, including single-file apps, that add to write-good-code."
     }
   ]
 }

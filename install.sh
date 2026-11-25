@@ -2,6 +2,7 @@
 # Copy plugin skills into a repo, for harnesses that read skill folders but not Claude Code plugins.
 #
 #   install.sh --harness LIST [--dest DIR] [--check] PLUGIN[,PLUGIN...] TARGET_REPO
+#   install.sh --update [--dest DIR] [--check] TARGET_REPO...
 #
 # --harness LIST  the harnesses the project uses, comma separated: claude, opencode, codex, zed.
 #                 Ask the user, do not guess.
@@ -11,25 +12,44 @@
 #                                    TARGET_REPO/.claude/skills into DIR (these harnesses do not read .claude)
 # --dest DIR      skill folder inside TARGET_REPO (default: .agents/skills)
 # --check         change nothing; exit 1 if the copies or links differ from what the script would make
+# --update        for each TARGET_REPO, install again with the harnesses and plugins recorded in DIR/.source
 #
-# The script writes DIR/.source with the commit, the skills it copied and the links it made. It never
+# The script writes DIR/.source with the commit, the harnesses, the skills it copied and the links it made. It never
 # touches a folder that is not listed there, and it stops if a local skill has the same name.
 set -euo pipefail
 
 dest=.agents/skills
 check=0
 harness=
+update=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --harness) harness=$2; shift 2 ;;
     --dest) dest=$2; shift 2 ;;
     --check) check=1; shift ;;
-    -h|--help) sed -n '2,17p' "$0"; exit 0 ;;
+    --update) update=1; shift ;;
+    -h|--help) sed -n '2,19p' "$0"; exit 0 ;;
     --) shift; break ;;
     -*) echo "unknown option: $1" >&2; exit 2 ;;
     *) break ;;
   esac
 done
+if [ "$update" -eq 1 ]; then
+  [ $# -ge 1 ] || { echo "usage: install.sh --update [--dest DIR] [--check] TARGET_REPO..." >&2; exit 2; }
+  status=0
+  for t in "$@"; do
+    f=$t/$dest/.source
+    h=$(awk '$1 == "harness" { print $2 }' "$f" 2>/dev/null || true)
+    p=$(awk '$1 == "skill" { sub("/.*", "", $2); print $2 }' "$f" 2>/dev/null | sort -u | paste -sd, - || true)
+    if [ -z "$h" ] || [ -z "$p" ]; then
+      echo "$t: $f has no harness or skill lines; run a full install once" >&2; status=1; continue
+    fi
+    echo "== $t"
+    if [ "$check" -eq 1 ]; then "$0" --harness "$h" --dest "$dest" --check "$p" "$t" || status=1
+    else "$0" --harness "$h" --dest "$dest" "$p" "$t" || status=1; fi
+  done
+  exit $status
+fi
 [ $# -eq 2 ] || { echo "usage: install.sh --harness LIST [--dest DIR] [--check] PLUGIN[,PLUGIN...] TARGET_REPO" >&2; exit 2; }
 [ -n "$harness" ] || { echo "missing --harness: ask the user which of claude, opencode, codex, zed the project uses" >&2; exit 2; }
 
@@ -112,5 +132,5 @@ for s in "${previous[@]:-}"; do [ -n "$s" ] && rm -rf "${out:?}/${s#*/}"; done
 for n in "${previous_links[@]:-}"; do [ -n "$n" ] && [ -L "$out/$n" ] && rm -f "$out/$n"; done
 for n in "${want_links[@]:-}"; do [ -n "$n" ] && ln -s "${up}.claude/skills/$n" "$out/$n"; done
 for s in "${want[@]}"; do cp -r "$src/plugins/${s%%/*}/skills/${s#*/}" "$out/${s#*/}"; done
-{ echo "commit $commit"; for s in "${want[@]}"; do echo "skill $s"; done; for n in "${want_links[@]:-}"; do [ -n "$n" ] && echo "link $n"; done; } > "$managed_file"
+{ echo "commit $commit"; echo "harness $harness"; for s in "${want[@]}"; do echo "skill $s"; done; for n in "${want_links[@]:-}"; do [ -n "$n" ] && echo "link $n"; done; } > "$managed_file"
 echo "installed ${#want[@]} skills and linked ${#want_links[@]} project skills into $out ($commit)"
