@@ -4,7 +4,7 @@ Agent skills shared across projects, in layers: core, language and project. This
 
 | Plugin | What it gives you |
 |---|---|
-| `engineering-core` | Planning, code writing, code review, PR descriptions, simple English, human review walkthroughs and a guide to set up `AGENTS.md`, for any language. |
+| `engineering-core` | Planning, code writing, code review, PR creation and descriptions, simple English, human review walkthroughs and a guide to set up `AGENTS.md`, for any language. |
 | `ml-experiments` | Experiment tracking: run records, naming, comparison tables, baselines and decisions. It needs an `experiment-profile` skill in the project. |
 | `python-dev` | Python rules that add to the core code skill. |
 | `godot-dev` | Godot and GDScript rules that add to the core code skill. |

@@ -1,13 +1,15 @@
 ---
 name: python-conventions
-description: Python rules for writing code. Always use it before you write, fix, refactor or review Python (.py) code, together with `write-good-code` and the repo's `code-conventions` skill, if it has one. Covers imports, running Python, logging, type annotations, lookups and tests.
+description: Python rules for writing code. Always use it before you start a new Python project, or write, fix, refactor or review Python (.py) code.
 ---
 
 # Python conventions
 
 These rules add to `write-good-code`. The repo's own `code-conventions` skill, if it has one, wins where they disagree.
 
+- **New project:** start an empty repo from the [simple-modern-uv](https://github.com/jlevy/simple-modern-uv) template. Follow its new-project procedure (`skills/simple-modern-uv/references/start-new-project.md` in that repo). Then remove codespell: delete every reference to it (`grep -ri codespell`), including the dev dependency, the `[tool.codespell]` table and the lint step. Run `make lint` and `make test` after.
 - Follow the zen of Python.
+- Use the idioms of the Python version that the project declares (`requires-python`).
 - Use absolute imports. Do not modify `PATH` or `PYTHONPATH`.
 - Run Python through `uv run` (or an activated virtual environment). If the repo has a `make` target for the task, use it.
 - Do not add `print` debugging. Use the `logging` module.

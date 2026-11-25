@@ -1,6 +1,6 @@
 ---
 name: godot-conventions
-description: Godot and GDScript rules for writing code. Use whenever writing, fixing, refactoring or reviewing `.gd`, `.tscn`, `.tres` or `.gdshader` files, alongside `write-good-code`. Covers paths, typing, scenes, resources, running the game and debug output.
+description: Godot and GDScript rules for writing code. Use whenever writing, fixing, refactoring or reviewing `.gd`, `.tscn`, `.tres` or `.gdshader` files.
 ---
 
 # Godot conventions

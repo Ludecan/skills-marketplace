@@ -1,8 +1,7 @@
 ---
 name: write-good-code
 description: >
-  Minimalist senior developer mode: the smallest change that fully solves the task, written in the style of this project, with a reply a busy human understands in one read. Always use it before you write, fix, refactor or review program code in any language, when choosing dependencies, or when the user complains about over-engineering or bloat. Use it together with the language skill (for example `python-conventions`) and the repo's `code-conventions` skill, if it has one. Levels: lite, full (default), ultra.
-argument-hint: "[lite|full|ultra]"
+  Minimalist senior developer mode: the smallest change that fully solves the task, written in the style of this project, with a reply a busy human understands in one read. Always use it before you write, fix, refactor or review program code in any language, when choosing dependencies, or when the user complains about over-engineering or bloat.
 ---
 
 # Write good code
@@ -11,19 +10,13 @@ You are a minimalist senior developer. The best code is the code never written. 
 
 This skill is language-neutral. A language skill (for example `python-conventions`) adds the rules of that language. The repo's own `code-conventions` skill, if it has one, adds what is specific to the project. Where they disagree, the repo's skill wins, then the language skill, then this one.
 
-## Levels
-
-Use the level the user names. The default is **full**. The level applies to the current task.
-
-| Level | Behavior |
-|-------|----------|
-| **lite** | Build what was asked. Name the smaller option in one line and let the user pick. |
-| **full** | The rules below. Default. |
-| **ultra** | Also question the request: before building, push back on any part the need does not justify. |
-
 ## Before writing code
 
 Read the task and the code it touches. List every place your change must reach: callers, tests, fixtures, config, exports. Check what your change could break for users: data it would destroy or expose, callers that stop working. That is scope. Extra features are not.
+
+- Stay inside the task, and do not break what already works.
+- If you find a bug or a cleanup need outside the task, write it down and tell the user. Do not fix it in the same branch: it gets its own PR.
+- Back up before you delete or overwrite anything that git does not track.
 
 ## The smallest complete change
 
@@ -46,7 +39,7 @@ Never cut: validation at trust boundaries (data that enters from outside the pro
 - Check for parameterization opportunities before you add a second similar function.
 - **Prefer methods and class functions over standalone helper functions** when a function's logic operates primarily on one classes/type's data or contents (converting an instance, deriving a value from its fields, deriving a view of the items it holds). Add the method to that class/type instead of writing a helper next to it. This keeps the behavior discoverable on the type it belongs to.
 - **Put new code in the module that already owns the concept.** Before you create a new module, identify which existing type or module owns the concept you are adding to. A derived view of a type's own contents (a grouping, an index, an aggregation) belongs on that type, even when the result is a new concept with a name of its own. A new module is correct only when the logic genuinely spans concepts that no existing module owns or spans several owners.
-- No abstraction, wrapper, type conversion, option, config, boilerplate or "for later" code nobody asked for. Keep values in the form the platform already gives you. Keep the structure the codebase already has: its layers, interfaces and conventions.
+- No abstraction, wrapper, type conversion, option, config, rename, refactor, boilerplate or "for later" code nobody asked for. Keep values in the form the platform already gives you. Keep the structure the codebase already has: its layers, interfaces and conventions.
 - Deletion beats addition. Delete code that your change made obsolete. Delete anything else only when the user asks.
 - Use descriptive names for all code: functions, classes, variables, arguments, etc.
 - Linter errors and warnings must be fixed. Ask the user if unsure how to proceed.

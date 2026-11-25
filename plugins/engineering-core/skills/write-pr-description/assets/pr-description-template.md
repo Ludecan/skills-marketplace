@@ -2,14 +2,6 @@
 
 PR objective goes here
 
-## In short (ELI5)
-
-One or two very simple sentences goes here
-
-## Summary
-
-Summary paragraph goes here
-
 ## Review order
 
 1. [first_file.py](link-to-file-on-github)

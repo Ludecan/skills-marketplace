@@ -1,7 +1,7 @@
 {
   "name": "godot-dev",
   "description": "Godot and GDScript coding rules that add to write-good-code.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": {
     "name": "Pablo Alfaro",
     "email": "pablo@elbosque.ai"

@@ -13,7 +13,6 @@ description: >
     - "review this file for quality"
     - "critique this implementation"
     - "audit this code"
-version: 0.2.2
 user-invocable: true
 allowed-tools:
   - Read

@@ -20,7 +20,7 @@ A core skill that needs project facts says which project skill supplies them, an
 
 | Plugin | Skills |
 |---|---|
-| `engineering-core` | `planning`, `write-good-code`, `review-changes`, `write-pr-description`, `write-simple-english`, `human-review-helper`, `project-instructions` |
+| `engineering-core` | `planning`, `write-good-code`, `review-changes`, `make-prs`, `write-pr-description`, `write-simple-english`, `human-review-helper`, `project-instructions` |
 | `ml-experiments` | `experiment-tracking` |
 | `python-dev` | `python-conventions` |
 | `godot-dev` | `godot-conventions` |
@@ -79,9 +79,10 @@ Where each harness looks for skills:
 
 1. Check that it is generic. If a rule names a path, command, file, tool or number that only one project uses, it belongs in that project's skill.
 2. Put it in the plugin that matches its layer. Language rules go in the language plugin. Do not repeat a rule that a lower layer already states: state each rule once.
-3. Keep the description specific about when to use the skill.
+3. The description holds a one-line summary of the skill and when to use it (and when not to), nothing else. The agent reads it only to choose the skill. What the skill covers, which skills it works with and what it needs go in the body.
 4. Keep `SKILL.md` short. Move detail to files in the skill folder, one link deep.
 5. Raise the plugin `version` in `plugins/<name>/.claude-plugin/plugin.json`.
-6. Run `./install.sh --harness zed --check engineering-core <test-project>` against a test project before you merge.
+6. When you add, rename or remove a skill, or move a responsibility between skills, update the "Who owns what" table in `engineering-core:project-instructions`.
+7. Run `./install.sh --harness zed --check engineering-core <test-project>` against a test project before you merge.
 
 A change that a consumer needs to override is a sign that a rule is too specific for this repo.
