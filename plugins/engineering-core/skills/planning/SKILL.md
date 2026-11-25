@@ -1,6 +1,6 @@
 ---
 name: planning
-description: Multi-phase implementation planning workflow. Use before you write code for any complex feature that needs a structured plan - multi-file work, cross-module behavior changes, data schema/interface changes, or anything likely to need 3+ commits. It also covers the commit per phase, the PR slice proposal at the end, and the repo map update.
+description: Multi-phase implementation planning workflow. Use before you write code for any complex feature that needs a structured plan - multi-file work, cross-module behavior changes, data schema/interface changes, or anything likely to need 3+ commits.
 ---
 
 # Applicability: Choose Planning Mode First
@@ -98,29 +98,17 @@ the phase summary. Passing tests and a clean lint are necessary but not
 sufficient; the commit message is a required deliverable of every phase,
 not an optional extra you provide only if asked.
 
-# 7. Propose PR Slices and Align with the User
-Do this only after all the work is done: every phase is implemented and committed. Do not propose slices while you present the plan or between phases, and do not open a branch or PR before the slices are approved. At this point look at the real diff and propose how to split it into PR slices: fixes and other changes that nobody could foresee during planning are in the diff now.
-
-Follow the "Small, focused PRs" rules in `AGENTS.md`. Each slice is one PR. For each slice, give:
-- A title and the commits or files it contains
-- What it depends on. Slices are independent where possible. Stack a slice on another one only when it needs it.
-- The changed line count
-- How a reviewer can verify it, if the slice is over the size warning and cannot be split
-
-Put fixes, refactors, renames and formatting first, as slices that branch from the target branch of the PR (usually `main`). Include every unrelated bug that was recorded during execution as its own slice.
-
-**MANDATORY STOP** - wait for the user to approve or revise the slices. Do not create branches or PRs before then.
-
-# 8. Final Report
+# 7. Final Report
 First, if the plan no longer matches what you built, update its phases and commit the plan file. Keep the goal text as it was approved, so the goal can be checked against the result. Then, when all phases are complete, summarize the overall result in chat, including:
 - Overall summary of what was built and why
 - All phases completed (checklist)
 - Full list of files modified/created
 - Key functions/classes added
 - Test coverage summary
+- Unrelated bugs and cleanups recorded during execution
 - Recommended next steps
 
-# 9. Update Repo Map
+# 8. Update Repo Map
 The repo map lives in `AGENTS.md`. After all code and docs changes are complete, review whether repository structure or ownership has changed. Update the map only if it materially changed, in its own final commit so it does not hide the real change. If the repo has no map in its instructions file, tell the user and point them to the `project-instructions` skill.
 
 Include updates such as:
@@ -191,6 +179,6 @@ feat(annotation-parser): add CVAT XML frame extraction
 - In Full Planning Mode, you NEVER skip the plan approval pause
 - In Full Planning Mode, you keep commit pauses at real phase boundaries; do not create extra stop points for trivial follow-up edits that are still part of the same phase
 - In Full Planning Mode, you do not start execution without a research pass first
-- In Full Planning Mode, you do not fix unrelated bugs during execution. Record them for the PR slicing step and tell the user
+- In Full Planning Mode, you do not fix unrelated bugs during execution. Record them in the final report and tell the user
 - In Full Planning Mode, you NEVER end a phase turn without presenting that phase's commit message - a phase summary without one is incomplete, not just terse
 - In Fast Path, you must still clarify scope and run targeted verification

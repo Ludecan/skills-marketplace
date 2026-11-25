@@ -1,6 +1,6 @@
 ---
 name: experiment-tracking
-description: Disciplined experiment tracking for ML training and model benchmarks - run records, naming, reproducibility, comparison tables, promotion, and unattended grid runs. Use when running, comparing or logging experiments, when asked why a result is not reproducible, or when bootstrapping tracking in a project. Needs the project's experiment profile.
+description: Disciplined experiment tracking for ML training and model benchmarks. Use when running, comparing or logging experiments, when asked why a result is not reproducible, or when bootstrapping tracking in a project.
 ---
 
 # Experiment Tracking
@@ -13,25 +13,26 @@ The agent that runs an experiment writes the record itself, from the run's own o
 
 - **Track**: one hypothesis or investigation, with one question to answer (for example "does dropping low-variance features hurt churn?"). Everything about a track lives in one folder, `<root>/<YYYYMMDD_HHMM>_<track>/`. The timestamp is when the track was opened, so folders sort in the order the work happened. `<track>` is a short kebab-case name without a date. `<root>` is `experiments/` unless the profile says otherwise.
 - **Variant**: one configuration under test inside a track. The first variant is the baseline. Every other variant differs from the baseline by one variable. A variant has one short permanent name, `N-<name>`: `N` is its position in the track's sequence (`1-` is the baseline) and `<name>` says what it changes (`1-baseline`, `2-drop-low-variance`, `3-k_t24_poll`). The numbers make the file order tell the story of the investigation. That name is the variant's folder, the prefix of its record file and its row id in `COMPARISON.md`. A variant is never renamed, and its name and number are never reused for a different config.
-- **Run**: one execution of a variant. A repeat or a corrected run of the same config is a new run with its own suffixed name (`<variant>_r2`) and its own record. The variant's row in `COMPARISON.md` holds its last valid run (Step 4).
-- **Run name**: `<track>/<variant>`, or `<track>/<variant>_r2` for a repeat. It identifies a run in the record header and whenever the run is quoted outside the repo.
-- **Run record**: `<variant>_run_record.md`, one per run (Step 1).
+- **Run**: one execution of a variant, named `<variant>_<YYYYMMDD_HHMM>`. The timestamp is when the run started. A repeat or a corrected run of the same config is a new run with its own timestamp and its own record. The variant's row in `COMPARISON.md` holds its last valid run (Step 4).
+- **Run name**: `<track>/<variant>_<YYYYMMDD_HHMM>`. It identifies a run in the record header and whenever the run is quoted outside the repo.
+- **Run record**: `<variant>/<variant>_<YYYYMMDD_HHMM>_run_record.md`, one per run (Step 1).
+- **Run output**: `<output>/<YYYYMMDD_HHMM>_<track>/<variant>_<YYYYMMDD_HHMM>/`, outside the repo. The track folder has the same name as in `<root>`, so the runs of a variant sort together. The profile sets `<output>`.
 - **`COMPARISON.md`**: one per track, the reader's view: verdict, one comparison table, findings and dated notes (Step 4). Start from `assets/COMPARISON.template.md`.
 
 ## The experiment profile (read first)
 
 This skill is the shared procedure. Everything that depends on the project lives in the repo's **experiment profile**: a small repo-local skill named `experiment-profile`. Load it before any step of the experiment. Where the profile and this skill disagree, the profile wins.
 
-If the repo has no `experiment-profile` skill, do not guess metrics, paths or table columns. Write the profile with the user first. It must answer:
+If the repo has no `experiment-profile` skill, do not guess metrics, paths or table columns. Write the profile with the user first, under the rules for project skills in `project-instructions`. It must answer:
 
-1. Layout: the `<root>` folder for tracks and where each variant's config file sits inside its track folder.
+1. Layout: the `<root>` folder for tracks, where each variant's config file sits inside its track folder, and the `<output>` folder for run outputs.
 2. Run record: the exact template and the fields specific to this domain (metrics, artifacts, environment).
 3. Metric protocol: primary and auxiliary metrics, and the evaluation set or bench parameters.
 4. Provenance: how code identity is recorded (git SHA, or binary paths and image tags when the code is not in git) and the reproducibility tolerance.
 5. Comparison document: path, the full comparison table columns, row identity, the report script if one exists. Write the columns out exactly: every column name in order, with its unit, the source of its value and how it aggregates (mean, peak, final). The table is the same in every track, so the columns are never "as in the source tracks". The profile lists the columns between the standard ones (Step 4).
-6. Promotion: what "promoted" does (copy a config, export a model, update a summary file).
-7. Domain rules and pitfalls that have already bitten this project.
-8. Commands and scripts: record and report generators, grid drivers.
+6. Promotion: where a promoted model or config goes, and what makes a variant a winner.
+7. Domain rules and pitfalls that still bite this project.
+8. Commands: which commands the experiments use (training, evaluation, record and report generators, grid drivers). The commands themselves live in the Commands section of `AGENTS.md`, not in the profile.
 
 ## Operating procedure
 
@@ -58,7 +59,7 @@ Inconsistent logging is as bad as no logging. For every run, the agent generates
 - Command: the exact command that reproduces the run, fully expanded and copy-pasteable, with its working directory and every environment override. When a wrapper script assembles the command, record both the wrapper invocation and the expanded command it produced: wrappers fill in defaults and drift silently. A run without a recorded command is not a run.
 - Code: the git commit SHA. Fail the run if the working tree is dirty, and record any override. If part of the code is not in git, the profile says what to record instead.
 - Also: identity (run name, date and time), the data or model under test (name, path, version or hash, splits), environment facts that differ from the defaults, the profile's metrics with the evaluation set named, and artifacts (the root output folder and the exported or promoted files, not every intermediate checkpoint).
-- Anomalies: crashes, watchdog kills, OOM retries, interference. An anomalous run gets a note in the record, not silence. A phase that wrote bad values stays in the record and is not a result; the real measurement is a new `_rN` run.
+- Anomalies: crashes, watchdog kills, OOM retries, interference. An anomalous run gets a note in the record, not silence. A phase that wrote bad values stays in the record and is not a result; the real measurement is a new run.
 - Outcome: `reference` (the baseline only), `promoted`, `rejected` or `inconclusive`, filled by the agent when the series is judged. A rejected run names the number that rejects it.
 
 A track folder holds the configs, records and comparison of one track together, so a config is tied to the track it was written for:
@@ -68,7 +69,7 @@ A track folder holds the configs, records and comparison of one track together, 
 ├── COMPARISON.md                 # one per track
 ├── <variant>.yaml                # a variant's config file, where the profile places it
 └── <variant>/
-    └── <variant>_run_record.md   # one record per run
+    └── <variant>_<YYYYMMDD_HHMM>_run_record.md   # one record per run
 ```
 
 The variant folder is the whole raw trail of that variant: the record, the serve or training log, the raw result files, monitor output and any `REFERENCES.md`. The profile decides whether the config sits in the variant folder or beside it. Do not write raw results to a file shared by every track: a shared key can collide across tracks and a re-patch can pick the wrong row.
@@ -78,7 +79,7 @@ The variant folder is the whole raw trail of that variant: the record, the serve
 Names are the index. Bad names make the tracker useless.
 
 - Group runs into tracks by hypothesis. Never group by date or author: the hypothesis is the unit of learning, and the timestamp prefix only sorts track folders.
-- A logged run is immutable: a wrong record stays, and a corrected run gets a new `_rN` name. Never reuse a name or a retired variant number.
+- A logged run is immutable: a wrong record stays, and a corrected run is a new run with its own timestamp. Never reuse a name or a retired variant number.
 - One variable per variant. A run that changes two things measures neither.
 - An experiment owns a copy of every config it runs. Never run or edit a shared production config from an experiment, and never point at another experiment's output directories: copy the config into the track folder first.
 - Number variants in the order they are created. Compare every variant against the baseline.
@@ -89,7 +90,7 @@ Names are the index. Bad names make the tracker useless.
 - A run is reproducible when the recorded command or config reconstructs it exactly. For seeded training, a re-run must land within the tolerance. Set the tolerance in the profile. Default: 0.5 percent relative difference on the primary metric. Looser than 2 percent means the run is non-deterministic: find unseeded operations, non-deterministic kernels or unstable data ordering.
 - Dataset splits are deterministic and reproducible from the config alone. Use the project's existing split and hashing scheme; where there is none, hash a stable ID into buckets, which survives dataset growth.
 - Freeze the setup before a series. If an engine, image or dependency must change mid-series, end the series and start a new one.
-- When the profile gives no tolerance (throughput, latency and other noisy measurements), run a baseline repeat (`1-<name>_r2`), which keeps its own row, and use the spread of the two rows as the noise floor. A variant differs from the baseline on a cell only when it lands outside that spread. A change inside the tolerance or the noise floor, or a cell within the spread of a decision threshold, is `inconclusive` and gets an `_rN` run before the decision.
+- When the profile gives no tolerance (throughput, latency and other noisy measurements), run the baseline a second time. The repeat keeps its own row, with its run name (`1-<name>_<YYYYMMDD_HHMM>`) as the row id. Use the spread of the two rows as the noise floor. A variant differs from the baseline on a cell only when it lands outside that spread. A change inside the tolerance or the noise floor, or a cell within the spread of a decision threshold, is `inconclusive` and gets another run before the decision.
 
 ### Step 4: Compare and decide
 
@@ -127,7 +128,7 @@ Use this when a series is a table of rows that one driver can run. The agent set
 
 Rules:
 
-- A FAIL row gets no done entry and no automatic retry: a retry would append a second set of result rows under the same name. Triage first. Re-runs take `_rN` suffixes.
+- A FAIL row gets no done entry and no automatic retry: a retry would append a second set of result rows under the same row id. Triage first. A re-run is a new run with its own timestamp.
 - Seed the done file from rows already measured before editing the table.
 - Before leaving, dry-run the setup: syntax checks, `status` output and, when affordable, one short row end to end including collection.
 - On return, read `status` and the grid log tail, check that each DONE row has its record and table cells, triage FAIL rows, then write the Step 4 conclusions.

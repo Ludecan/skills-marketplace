@@ -1,6 +1,6 @@
 ---
 name: human-review-helper
-description: Guides a human through understanding a large PR or change before merge by tracing the "Golden Path" of execution. Use when the user asks to understand, walk through, or explain a PR, a large diff, or a set of uncommitted changes — NOT to review or assess code quality. Presents domain concepts, maps where the changed files live, anchors understanding in tests, traces data flow, and verifies comprehension via counterfactual questions.
+description: Guides a human through understanding a large PR or change before merge by tracing the "Golden Path" of execution. Use when the user asks to understand, walk through, or explain a PR, a large diff, or a set of uncommitted changes — NOT to review or assess code quality.
 argument-hint: "Which PR, branch, or uncommitted changes to walk through?"
 ---
 

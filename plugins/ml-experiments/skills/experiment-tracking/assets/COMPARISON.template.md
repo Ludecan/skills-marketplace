@@ -15,7 +15,7 @@ Status: [FILL: which rows are measured, queued, or copied from another track, an
 ## Promotion criterion (set before the first run)
 
 1. [FILL: the decision rule: primary and auxiliary metrics, the evaluation set or bench parameters, the threshold.]
-2. [FILL: the noise floor: the baseline repeat `1-[name]_r2`, or the profile's tolerance.]
+2. [FILL: the noise floor: the baseline repeat `1-[name]_[YYYYMMDD_HHMM]`, or the profile's tolerance.]
 3. [FILL: what each outcome means for this track: promoted, rejected, inconclusive.]
 
 ## Predictions (to check rows against, not results)
@@ -30,10 +30,10 @@ Status: [FILL: which rows are measured, queued, or copied from another track, an
 
 | # | config | [FILL: primary metric (evaluation set)] | [FILL: auxiliary metric] | outcome | run |
 |---|--------|------------------------------------------|--------------------------|---------|-----|
-| 1-baseline | [FILL: what it is] | [FILL] | [FILL] | reference | `1-baseline/1-baseline_run_record.md` |
-| 2-[FILL: name] | [FILL: diff from baseline, one variable] | [FILL] | [FILL] | promoted | `2-[FILL: name]/2-[FILL: name]_run_record.md` |
-| 3-[FILL: name] | [FILL: diff from baseline] | [FILL] | [FILL] | rejected: [FILL: reason in one phrase] | `3-[FILL: name]/3-[FILL: name]_run_record.md` |
-| 4-[FILL: name] | [FILL: diff from baseline] | [FILL] | ~[FILL] | inconclusive | `4-[FILL: name]_r2/4-[FILL: name]_r2_run_record.md` (the last valid run) |
+| 1-baseline | [FILL: what it is] | [FILL] | [FILL] | reference | `1-baseline/1-baseline_[FILL: YYYYMMDD_HHMM]_run_record.md` |
+| 2-[FILL: name] | [FILL: diff from baseline, one variable] | [FILL] | [FILL] | promoted | `2-[FILL: name]/2-[FILL: name]_[FILL: YYYYMMDD_HHMM]_run_record.md` |
+| 3-[FILL: name] | [FILL: diff from baseline] | [FILL] | [FILL] | rejected: [FILL: reason in one phrase] | `3-[FILL: name]/3-[FILL: name]_[FILL: YYYYMMDD_HHMM]_run_record.md` |
+| 4-[FILL: name] | [FILL: diff from baseline] | [FILL] | ~[FILL] | inconclusive | `4-[FILL: name]/4-[FILL: name]_[FILL: YYYYMMDD_HHMM]_run_record.md` (the last valid run) |
 | 5-[FILL: name] | copied from `[FILL: other track]` row [FILL: id] | [FILL] | NA | [FILL] | source track |
 
 Commands, one per row, expanded and copy-pasteable (the record holds the same command):

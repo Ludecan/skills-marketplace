@@ -1,6 +1,6 @@
-# [FILL: track]/[FILL: variant] - run record
+# [FILL: track]/[FILL: variant]_[FILL: YYYYMMDD_HHMM] - run record
 
-Run name: [FILL: <track>/<variant>, or <track>/<variant>_rN for a repeat]
+Run name: [FILL: <track>/<variant>_<YYYYMMDD_HHMM>]
 Date: [FILL: YYYY-MM-DD HH:MM]
 
 ## Code and command
