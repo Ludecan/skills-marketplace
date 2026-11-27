@@ -42,4 +42,7 @@ These rules add to `write-good-code`. The repo's own `code-conventions` skill, i
 
 ## Check your work
 
-Use the repo's `make` targets when they exist. [Tools and tests](references/tools-and-tests.md) gives the commands for lint, format, parse checks, headless tests and screenshots, and the pitfalls of headless runs.
+- After code changes, and before you commit or return control to the user, run `make format`, then `make lint` until it reports no errors and no warnings, then `make test`, and `make smoke` if the repo has it. A failing test is a defect: fix its cause, and do not weaken the test to make it pass. Godot exits with code 0 even when a script fails, so also read the output for `SCRIPT ERROR`.
+- Consider giving the format, lint and test run to a subagent, in its own context, instructing it to change formatting and lint only (no logic changes, no refactors, no changes to test logic, no hand edits of `.tscn` or `.tres` files), and to report test failures to you without fixing them, along with a short summary of its changes.
+
+If the repo has no `make` targets, use the commands in [tools and tests](references/tools-and-tests.md). That file also gives the parse checks, headless tests and screenshots, and the pitfalls of headless runs.
