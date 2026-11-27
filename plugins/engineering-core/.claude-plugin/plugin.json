@@ -1,7 +1,7 @@
 {
   "name": "engineering-core",
   "description": "Language-neutral engineering skills: planning, code writing, code review, PR creation and descriptions, simple English, human review walkthroughs.",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "author": {
     "name": "Pablo Alfaro",
     "email": "pablo@elbosque.ai"

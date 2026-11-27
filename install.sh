@@ -63,7 +63,7 @@ for h in ${harness//,/ }; do
   esac
 done
 if [ "$copies" -eq 0 ]; then
-  echo "claude only: nothing to install. Enable the plugins in .claude/settings.json (see AGENTS.md)."
+  echo "claude only: nothing to copy. Enable the plugins in .claude/settings.json and install them with --scope local (see AGENTS.md)."
   exit 0
 fi
 

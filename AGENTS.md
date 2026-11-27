@@ -36,12 +36,26 @@ There are two channels. Both give the same skill text.
 
 ```json
 {
-  "extraKnownMarketplaces": { "<marketplace>": { "source": { "source": "github", "repo": "<org>/<this-repo>" }, "autoUpdate": true } },
+  "extraKnownMarketplaces": {
+    "<marketplace>": { "source": { "source": "github", "repo": "<org>/<this-repo>" }, "autoUpdate": true }
+  },
   "enabledPlugins": { "engineering-core@<marketplace>": true }
 }
 ```
 
-The project setting enables a plugin but does not install it. Install each plugin once per machine: `claude plugin install engineering-core@<marketplace> --scope user`. Third-party marketplaces do not auto-update by default, so keep `"autoUpdate": true`. Claude Code then updates a plugin only when its `version` changes (see "Add or change a skill"). To update by hand: `claude plugin marketplace update <marketplace>`, then `/reload-plugins`.
+Enabling a plugin does not install it. After you enable the plugins, run the install yourself from the project folder, once for each enabled plugin, with local scope:
+
+```
+claude plugin install engineering-core@<marketplace> --scope local
+```
+
+Then tell the user to restart the session, because the skills load when a session starts. Each developer needs the install once in each project: when a project already enables the plugins but its skills are missing, run the same commands.
+
+Use local scope, not the default user scope. User scope turns the plugin on in every project on the machine, so it mixes with the skills of other marketplaces, for example those of another organization. Local scope turns it on only in this project, in `.claude/settings.local.json`, which stays out of git.
+
+Leave out `ref` in the source, so the marketplace follows `main`. A `ref` to another branch keeps the installs and the updates on that branch, even after it merges.
+
+`autoUpdate` keeps the installed plugins current. Claude Code turns it off by default for marketplaces that are not Anthropic's. With it on, Claude Code refreshes this marketplace and updates the installed plugins a few minutes after a session starts, and the new versions load at the next session or after `/reload-plugins`. A plugin updates only when its `version` in `plugin.json` goes up, which is why a skill change raises it (see "Add or change a skill").
 
 Plugin skills are namespaced: `engineering-core:planning`. Claude Code caches plugins per user, outside the project, so other harnesses cannot see them.
 
@@ -54,7 +68,7 @@ Plugin skills are namespaced: `engineering-core:planning`. Claude Code caches pl
 
 | Harnesses chosen | What the script does |
 |---|---|
-| `claude` only | Nothing. Enable the plugins in `.claude/settings.json`. |
+| `claude` only | Nothing. Enable the plugins in `.claude/settings.json` and install them with local scope. |
 | `opencode` | Copies the plugin skills into `.agents/skills/`. OpenCode reads `.claude/skills/` itself, so the project skills need nothing. |
 | `codex` or `zed` | Copies the plugin skills into `.agents/skills/`, and links each project skill of `.claude/skills/` (for example `code-conventions` and `experiment-profile`) into `.agents/skills/` with a relative symlink. These harnesses do not read `.claude/skills/`. |
 
